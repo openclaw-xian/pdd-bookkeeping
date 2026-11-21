@@ -23,6 +23,19 @@ kefu     done
 ```
 exit 0，四类产物齐全。
 
+## 3 店 10 月
+
+配置：root=`D:/pdd-bills`，3 店，四模块。
+
+| 模块 | 状态 | 耗时 |
+|---|---|---|
+| bills | done | 21.9s（其中 1 店已有产物，子 skill skipped，产物校验通过） |
+| promo | done | 10.1s |
+| orders | done | 47.3s |
+| kefu | done | 15.1s |
+
+总 exit 0；三店四类产物全部齐全。
+
 ## 已验证行为
 
 - 子配置生成到 `_runs/bookkeeping-<时间>/configs/`
