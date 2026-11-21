@@ -10,11 +10,13 @@ description: 拼多多多店铺「记账四件套」总控。按店铺 × 期间
 
 ## 前置条件
 
-- 已安装四个子 skill 到 `~/.agents/skills/`：
+- 已安装五个目录到 `~/.agents/skills/`：**四个子 skill + 本总控**
   - `pdd-bills`（入口 `batch-run.mjs`）
   - `pdd-promo-cost`（`run.mjs`）
   - `pdd-order-export`（`run.mjs`）
   - `pdd-kefu-performance`（`run.mjs`）
+  - `pdd-bookkeeping`（本总控，`run.mjs`）
+- 五个仓库与一键安装清单见 `README.md`
 - Windows + ego-browser；各店 profile 已登录
 - Node.js
 - 账单根目录（config `root`）

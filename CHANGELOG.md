@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 — 2026-11-21
+
+- README 增加 5 个 skill 安装清单、仓库链接、git clone / mklink 示例和装完自检。
+- 明确总控不包含子 skill；只装总控会报 child_not_found。
+
 ## 0.1.1 — 2026-11-21
 
 - 3 店 10 月总控实测：bills 21.9s、promo 10.1s、orders 47.3s、kefu 15.1s，全部 done，exit 0。
