@@ -1,0 +1,13 @@
+{
+  "root": "D:/pdd-bills",
+  "from": "2026-10-01",
+  "to": "2026-10-31",
+  "shops": [
+    { "shop": "<店铺A>", "profile": "<profile-A>" },
+    { "shop": "<店铺B>", "profile": "<profile-B>" }
+  ],
+  "modules": ["bills", "promo", "orders", "kefu"],
+  "concurrency": 3,
+  "orders": { "retries": 1 },
+  "kefu": { "retentionDays": 62 }
+}
