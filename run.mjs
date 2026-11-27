@@ -5,6 +5,7 @@ import { spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveLedgerRoot, recordShopOperation } from "./shop-ledger.mjs";
 
 const CFG_PATH = process.argv[2];
 if (!CFG_PATH) { console.error("用法: node run.mjs <suite-config.json>"); process.exit(2); }
@@ -161,7 +162,15 @@ async function runModule(m) {
 }
 
 const results = [];
-for (const m of modules) results.push(await runModule(m));
+for (const m of modules) {
+  const r = await runModule(m);
+  results.push(r);
+  for (const s of (r.stores || [])) {
+    try {
+      await recordShopOperation({ root: LEDGER_ROOT, shop: s.shop, module: m, action: "bookkeeping-export", period: from + "~" + to, status: s.status, outputs: (s.outputs && s.outputs.files) || [], runId: "bookkeeping-" + stamp, evidence: path.join(RUN_DIR, "report.json") });
+    } catch (e) { console.error("SHOP_LEDGER_FAILED " + (e && e.message || e)); }
+  }
+}
 const report = { runId: "bookkeeping-" + stamp, root: ROOT, from, to, periodDir, label: runLabel, modules: results, createdAt: new Date().toISOString() };
 await fs.writeFile(path.join(RUN_DIR, "report.json"), JSON.stringify(report, null, 1), "utf8");
 const lines = ["bookkeeping " + stamp + " " + from + "~" + to + " root=" + ROOT];
