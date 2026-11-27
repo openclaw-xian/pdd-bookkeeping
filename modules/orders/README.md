@@ -24,7 +24,7 @@ cp -r . ~/.agents/skills/pdd-order-export
 
 - Windows + ego-browser（各店 profile 已登录）
 - Node.js
-- 账单根目录（默认 `D:/pdd-bills`，非 C 盘；`root` 可改）
+- 账单根目录（默认 `<记账根目录>`，非 C 盘；`root` 可改）
 
 ## 用法
 
@@ -36,7 +36,7 @@ node run.mjs order-config.json
 {
   "from": "2026-10-01",
   "to": "2026-10-31",
-  "root": "D:/pdd-bills",
+  "root": "<记账根目录>",
   "shops": [{ "shop": "<店铺A>", "profile": "<profile-A>" }]
 }
 ```

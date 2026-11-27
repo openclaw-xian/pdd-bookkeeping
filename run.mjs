@@ -14,7 +14,7 @@ const CFG = JSON.parse(await fs.readFile(CFG_PATH, "utf8"));
 const HOME = os.homedir();
 const SELF_DIR = path.dirname(fileURLToPath(import.meta.url));
 const MODULES_ROOT = String(CFG.modulesRoot || path.join(SELF_DIR, "modules")).replace(/\\/g, "/").replace(/\/$/, "");
-const ROOT = String(CFG.root || process.env.PDD_BILLS_ROOT || "D:/pdd-bills").replace(/\\/g, "/").replace(/\/$/, "");
+const ROOT = String(CFG.root || process.env.PDD_BILLS_ROOT || path.join(process.cwd(), "pdd-bills")).replace(/\\/g, "/").replace(/\/$/, "");
 const LEDGER_ROOT = resolveLedgerRoot(CFG);
 try { if (CFG.ledgerRoot && CFG.persistLedgerRoot !== false) saveLedgerRoot(LEDGER_ROOT); } catch {}
 const from = String(CFG.from || "");

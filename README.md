@@ -53,7 +53,7 @@ dir %USERPROFILE%\.agents\skills /b
 应看到 5 个目录。总控默认从 `~/.agents/skills` 找；放在别处时配置：
 
 ```json
-{ "skillsRoot": "D:/pdd-skills" }
+{ "skillsRoot": "<skills目录>" }
 ```
 
 **只装 `pdd-bookkeeping` 会报 `child_not_found`，这是预期行为。**
@@ -66,7 +66,7 @@ node run.mjs suite-config.json
 
 ```json
 {
-  "root": "D:/pdd-bills",
+  "root": "<记账根目录>",
   "from": "2026-10-01",
   "to": "2026-10-31",
   "shops": [{ "shop": "<店铺A>", "profile": "<profile-A>" }],

@@ -25,7 +25,7 @@ node <skill目录>/run.mjs suite-config.json
 
 ```json
 {
-  "root": "D:/pdd-bills",
+  "root": "<记账根目录>",
   "from": "2026-10-01",
   "to": "2026-10-31",
   "shops": [

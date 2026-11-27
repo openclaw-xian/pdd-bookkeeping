@@ -2,8 +2,8 @@
 
 ## 0.4.4 — 2026-11-20
 
-- 文档匿名化：测试记录里的真实店铺名/个人路径改为 `店铺A/B/C`、`D:/pdd-bills`。
-- 默认 root 改为通用 `D:/pdd-bills`（旧的 `D:/对账账单` 仍可通过 config `root` 指定）。
+- 文档匿名化：测试记录里的真实店铺名/个人路径改为 `店铺A/B/C`、`<记账根目录>`。
+- 默认 root 改为通用 `<记账根目录>`（旧的 `D:/对账账单` 仍可通过 config `root` 指定）。
 - SKILL.md 增加完整「配置字段」表（from/to/root/shops/only/concurrency/cooldown/reuse/retries 等）。
 
 ## 0.4.3 — 2026-11-20

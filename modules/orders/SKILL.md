@@ -17,7 +17,7 @@ description: 拼多多多店铺「订单查询 + 批量导出」（对账报表�
 
 - Windows + ego-browser（各店 profile 已登录）
 - Node.js
-- 账单根目录：默认 `D:/pdd-bills`（`root` 可改；非 C 盘不存在会自动创建；C 盘需 `allowC:true`）
+- 账单根目录：默认 `<记账根目录>`（`root` 可改；非 C 盘不存在会自动创建；C 盘需 `allowC:true`）
 - 店铺清单：`<root>/_stores.json` 或 config `shops`（首次建议显式提供；自动发现依赖 ego 已有店铺空间）
 
 ## 用法
@@ -32,7 +32,7 @@ node <skill目录>/run.mjs <config.json>
 {
   "from": "2026-10-01",
   "to": "2026-10-31",
-  "root": "D:/pdd-bills",
+  "root": "<记账根目录>",
   "shops": [
     { "shop": "<店铺A>", "profile": "<profile-A>" }
   ]
@@ -62,7 +62,7 @@ node <skill目录>/run.mjs <config.json>
 | 字段 | 默认 | 说明 |
 |---|---|---|
 | `from` / `to` | 必填 | `YYYY-MM-DD`，`to` 含当天；结束筛选自动 +1 天 |
-| `root` | `D:/pdd-bills` | 账单根目录；非 C 盘不存在会创建 |
+| `root` | `<记账根目录>` | 账单根目录；非 C 盘不存在会创建 |
 | `shops` | — | `[{shop, profile}]`；也可只写 shop |
 | `storesConfig` | `<root>/_stores.json` | 店铺清单路径 |
 | `only` | — | 只跑指定店铺名 |
