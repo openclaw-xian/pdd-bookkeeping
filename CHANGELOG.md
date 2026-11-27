@@ -1,3 +1,9 @@
+## 0.2.1 — 2026-11-27
+
+- 修复总控把模块 `no_data` 误判为 missing/failed：读取子模块 report，`no_data` 视为正常完成。
+- 实测内置 `modules/promo`：鱼越贴饰 2026-11-01~2026-11-27，spend=3822.87，生成推广花费.md/截图/账单信息.md。
+- 第一次 no_data、第二次有数据，确认总控两种情况都能处理。
+
 ## 0.2.0 — 2026-11-27
 
 - `pdd-bookkeeping` 改为唯一入口；`bills/promo/orders/kefu` 四个 skill 原样内置到 `modules/`。

@@ -141,8 +141,13 @@ async function runModule(m) {
   const exitCode = await new Promise((res) => childProc.on("exit", (code) => res(code === null ? -1 : code)));
   clearTimeout(timer);
   await fs.writeFile(logPath, stdout + stderr, "utf8").catch(() => {});
+  let childReport = null;
+  const rm = stdout.match(/REPORT=(.+)/);
+  if (rm) { try { childReport = JSON.parse(await fs.readFile(rm[1].trim(), "utf8")); } catch {} }
   const stores = [];
   for (const s of useShops) {
+    const cs = childReport && Array.isArray(childReport.stores) ? childReport.stores.find((x) => x.shop === s.shop) : null;
+    if (cs && cs.status === "no_data") { stores.push({ shop: s.shop, status: "no_data", exitCode, outputs: { ok: true, files: [], missing: [] } }); continue; }
     const v = await verifyOutputs(m, s.shop);
     let st = "done";
     if (exitCode === 4) st = "needs";
@@ -151,7 +156,7 @@ async function runModule(m) {
     else if (!v.ok) st = "missing";
     stores.push({ shop: s.shop, status: st, exitCode, outputs: v });
   }
-  const status = stores.every((s) => s.status === "done") ? "done" : (stores.some((s) => s.status === "needs") ? "needs" : (stores.some((s) => s.status === "preflight") ? "preflight" : "failed"));
+  const status = stores.every((s) => ["done", "no_data"].includes(s.status)) ? "done" : (stores.some((s) => s.status === "needs") ? "needs" : (stores.some((s) => s.status === "preflight") ? "preflight" : "failed"));
   return { module: m, status, exitCode, wallSec: Number(((Date.now() - started) / 1000).toFixed(1)), config: cfgPath, log: logPath, stores };
 }
 
