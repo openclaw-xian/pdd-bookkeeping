@@ -120,3 +120,7 @@ node <skill目录>/run.mjs suite-config.json
 4. 输出根目录
 
 确认后再生成 `modules` 列表并执行；模块串行，一个店跑完再下一个店。
+
+## 首次使用
+
+必须询问用户运营日志目录并配置 `ledgerRoot`；未配置返回 `ledger_root_required`，不默认 C 盘，不创建目录。

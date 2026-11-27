@@ -96,3 +96,7 @@ node run.mjs suite-config.json
 - 输出根目录
 
 模块的格式、字段、默认值、校验规则完全沿用原 skill，总控只负责编排、串行执行、校验产物和汇总。
+
+## 首次使用
+
+必须询问用户运营日志目录并配置 `ledgerRoot`；未配置返回 `ledger_root_required`，不默认 C 盘，不创建目录。

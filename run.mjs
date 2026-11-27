@@ -15,6 +15,7 @@ const HOME = os.homedir();
 const SELF_DIR = path.dirname(fileURLToPath(import.meta.url));
 const MODULES_ROOT = String(CFG.modulesRoot || path.join(SELF_DIR, "modules")).replace(/\\/g, "/").replace(/\/$/, "");
 const ROOT = String(CFG.root || process.env.PDD_BILLS_ROOT || "D:/pdd-bills").replace(/\\/g, "/").replace(/\/$/, "");
+const LEDGER_ROOT = resolveLedgerRoot(CFG);
 const from = String(CFG.from || "");
 const to = String(CFG.to || "");
 let modules = Array.isArray(CFG.modules) ? CFG.modules.slice() : [];
@@ -40,6 +41,7 @@ const CFG_DIR = path.join(RUN_DIR, "configs");
 const LOG_DIR = path.join(RUN_DIR, "logs");
 const issues = [];
 const addIssue = (code, question, extra = {}) => issues.push({ code, question, ...extra });
+if (!LEDGER_ROOT) addIssue("ledger_root_required", "首次使用请指定运营日志目录 ledgerRoot，不要默认 C 盘");
 
 // 统一期间：整月 YYYY-MM；跨月 from_to；可用 periodDir/label 覆盖
 const f = from.split("-").map(Number);
