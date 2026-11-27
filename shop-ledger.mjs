@@ -24,10 +24,10 @@ function safeName(s) { return String(s || "unknown").replace(/[\\/:*?"<>|]/g, "_
 function pad(n) { return String(n).padStart(2, "0"); }
 function localTime(d) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
 
-export async function recordShopOperation({ root, shop, module, action, period, status, outputs, runId, evidence, before, after }) {
+export async function recordShopOperation({ root, shop, module, action, period, month, status, outputs, runId, evidence, before, after }) {
   const now = new Date();
-  const month = `${now.getFullYear()}-${pad(now.getMonth() + 1)}`;
-  const dir = path.join(root, "店铺", safeName(shop), safeName(module), month);
+  const monthKey = String(month || (period && String(period).slice(0, 7)) || `${now.getFullYear()}-${pad(now.getMonth() + 1)}`);
+  const dir = path.join(root, "店铺", safeName(shop), safeName(module), monthKey);
   await fs.mkdir(dir, { recursive: true });
   const record = {
     schemaVersion: 1,

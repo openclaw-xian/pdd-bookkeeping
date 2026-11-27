@@ -181,7 +181,7 @@ for (const m of modules) {
   results.push(r);
   for (const s of (r.stores || [])) {
     try {
-      await recordShopOperation({ root: LEDGER_ROOT, shop: s.shop, module: m, action: "bookkeeping-export", period: from + "~" + to, status: s.status, outputs: moduleFiles(m, (s.outputs && s.outputs.files) || []), runId: "bookkeeping-" + stamp, evidence: path.join(RUN_DIR, "report.json") });
+      await recordShopOperation({ root: LEDGER_ROOT, shop: s.shop, module: m, action: "bookkeeping-export", period: from + "~" + to, month: from.slice(0, 7), status: s.status, outputs: moduleFiles(m, (s.outputs && s.outputs.files) || []), runId: "bookkeeping-" + stamp, evidence: path.join(RUN_DIR, "report.json") });
     } catch (e) { console.error("SHOP_LEDGER_FAILED " + (e && e.message || e)); }
   }
 }
