@@ -5,7 +5,7 @@ import { spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveLedgerRoot, recordShopOperation } from "./shop-ledger.mjs";
+import { resolveLedgerRoot, saveLedgerRoot, recordShopOperation } from "./shop-ledger.mjs";
 
 const CFG_PATH = process.argv[2];
 if (!CFG_PATH) { console.error("用法: node run.mjs <suite-config.json>"); process.exit(2); }
@@ -16,6 +16,7 @@ const SELF_DIR = path.dirname(fileURLToPath(import.meta.url));
 const MODULES_ROOT = String(CFG.modulesRoot || path.join(SELF_DIR, "modules")).replace(/\\/g, "/").replace(/\/$/, "");
 const ROOT = String(CFG.root || process.env.PDD_BILLS_ROOT || "D:/pdd-bills").replace(/\\/g, "/").replace(/\/$/, "");
 const LEDGER_ROOT = resolveLedgerRoot(CFG);
+try { if (CFG.ledgerRoot && CFG.persistLedgerRoot !== false) saveLedgerRoot(LEDGER_ROOT); } catch {}
 const from = String(CFG.from || "");
 const to = String(CFG.to || "");
 let modules = Array.isArray(CFG.modules) ? CFG.modules.slice() : [];
