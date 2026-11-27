@@ -1,3 +1,10 @@
+## 0.2.0 — 2026-11-27
+
+- `pdd-bookkeeping` 改为唯一入口；`bills/promo/orders/kefu` 四个 skill 原样内置到 `modules/`。
+- 总控不再依赖 `~/.agents/skills` 外部路径，默认从本 skill `modules/` 调用。
+- 缺少 `modules` 返回 `modules_missing`，先问用户导出内容；时间由用户指定。
+- 模块格式/字段/默认值/校验规则完全沿用原 skill。
+
 # Changelog
 
 ## 0.1.2 — 2026-11-21

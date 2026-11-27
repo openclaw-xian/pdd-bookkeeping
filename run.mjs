@@ -4,17 +4,20 @@ import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const CFG_PATH = process.argv[2];
 if (!CFG_PATH) { console.error("用法: node run.mjs <suite-config.json>"); process.exit(2); }
 const CFG = JSON.parse(await fs.readFile(CFG_PATH, "utf8"));
 
 const HOME = os.homedir();
-const SKILLS_ROOT = String(CFG.skillsRoot || path.join(HOME, ".agents", "skills")).replace(/\\/g, "/").replace(/\/$/, "");
+const SELF_DIR = path.dirname(fileURLToPath(import.meta.url));
+const MODULES_ROOT = String(CFG.modulesRoot || path.join(SELF_DIR, "modules")).replace(/\\/g, "/").replace(/\/$/, "");
 const ROOT = String(CFG.root || process.env.PDD_BILLS_ROOT || "D:/pdd-bills").replace(/\\/g, "/").replace(/\/$/, "");
 const from = String(CFG.from || "");
 const to = String(CFG.to || "");
-const modules = Array.isArray(CFG.modules) && CFG.modules.length ? CFG.modules : ["bills", "promo", "orders", "kefu"];
+let modules = Array.isArray(CFG.modules) ? CFG.modules.slice() : [];
+if (modules.includes("all")) modules = ["bills", "promo", "orders", "kefu"];
 const shops = (CFG.shops || []).map((s) => (typeof s === "string" ? { shop: s } : s)).filter((s) => s && s.shop);
 const only = CFG.only && CFG.only.length ? CFG.only : null;
 const todayIso = new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 10);
@@ -22,10 +25,10 @@ const label = String(CFG.label || "");
 const periodDirOverride = String(CFG.periodDir || "");
 
 const CHILD = {
-  bills: { file: "batch-run.mjs", cwd: path.join(SKILLS_ROOT, "pdd-bills") },
-  promo: { file: "run.mjs", cwd: path.join(SKILLS_ROOT, "pdd-promo-cost") },
-  orders: { file: "run.mjs", cwd: path.join(SKILLS_ROOT, "pdd-order-export") },
-  kefu: { file: "run.mjs", cwd: path.join(SKILLS_ROOT, "pdd-kefu-performance") },
+  bills: { file: "batch-run.mjs", cwd: path.join(MODULES_ROOT, "bills") },
+  promo: { file: "run.mjs", cwd: path.join(MODULES_ROOT, "promo") },
+  orders: { file: "run.mjs", cwd: path.join(MODULES_ROOT, "orders") },
+  kefu: { file: "run.mjs", cwd: path.join(MODULES_ROOT, "kefu") },
 };
 
 function addDays(iso, n) { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
@@ -49,6 +52,7 @@ if (!ymd(from) || !ymd(to)) addIssue("range_invalid", "from/to 必须是 YYYY-MM
 else if (from > to) addIssue("range_reversed", "起始日晚于结束日");
 else if (to > todayIso) addIssue("range_in_future", "结束日在未来（今天 " + todayIso + "）", { to });
 if (!shops.length) addIssue("shops_missing", "config 需要 shops（总控不替你猜店铺）");
+if (!modules.length) addIssue("modules_missing", "这次要导出什么：bills（账单）/ orders（订单）/ promo（推广费用）/ kefu（客服绩效）/ all（全部）");
 if (CFG.root == null) addIssue("root_missing_config", "请显式配置 root（记账根目录）");
 for (const m of modules) if (!CHILD[m]) addIssue("module_unknown", "未知模块：" + m, { module: m });
 if (modules.includes("kefu") && ymd(from) && from < addDays(todayIso, -62)) {

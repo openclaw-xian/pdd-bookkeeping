@@ -10,13 +10,9 @@ description: 拼多多多店铺「记账四件套」总控。按店铺 × 期间
 
 ## 前置条件
 
-- 已安装五个目录到 `~/.agents/skills/`：**四个子 skill + 本总控**
-  - `pdd-bills`（入口 `batch-run.mjs`）
-  - `pdd-promo-cost`（`run.mjs`）
-  - `pdd-order-export`（`run.mjs`）
-  - `pdd-kefu-performance`（`run.mjs`）
-  - `pdd-bookkeeping`（本总控，`run.mjs`）
-- 五个仓库与一键安装清单见 `README.md`
+- 四个模块已内置在 `modules/`：`bills` / `promo` / `orders` / `kefu`
+- 只需安装 `pdd-bookkeeping` 一个 skill；独立仓库保留给单模块调试
+- 模块格式、字段、默认值、校验规则沿用原 skill
 - Windows + ego-browser；各店 profile 已登录
 - Node.js
 - 账单根目录（config `root`）
@@ -113,3 +109,14 @@ node <skill目录>/run.mjs suite-config.json
 3. 某模块失败不隐藏，report 必须记录
 4. 四类产物必须校验存在
 5. kefu 超保留期只 skipped，不错算日期
+
+## 执行前必须问用户
+
+缺少 `modules` 时返回 `modules_missing`，不要默认全跑。先问：
+
+1. 这次导出什么：账单 / 订单 / 推广费用 / 客服绩效 / 全部
+2. 哪些店铺
+3. 时间范围（用户指定）
+4. 输出根目录
+
+确认后再生成 `modules` 列表并执行；模块串行，一个店跑完再下一个店。

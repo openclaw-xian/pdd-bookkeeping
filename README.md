@@ -11,9 +11,9 @@
 
 四类产物统一落在 `<账单根目录>/<店铺>/<期间>/`，总控校验产物并写 `report.json`。
 
-## 安装清单（5 个，缺一不可）
+## 内置模块
 
-总控**不包含**四个子 skill，必须单独安装到 `~/.agents/skills/`：
+总控**已内置**四个模块到 `modules/`，不需要单独安装；独立仓库只保留给单模块调试：
 
 | 目录 | 作用 | 入口 | 仓库 |
 |---|---|---|---|
@@ -21,7 +21,7 @@
 | `pdd-promo-cost` | 推广花费 | `run.mjs` | https://github.com/openclaw-xian/pdd-promo-cost |
 | `pdd-order-export` | 订单导出 | `run.mjs` | https://github.com/openclaw-xian/pdd-order-export |
 | `pdd-kefu-performance` | 客服绩效截图 | `run.mjs` | https://github.com/openclaw-xian/pdd-kefu-performance |
-| `pdd-bookkeeping` | 本总控 | `run.mjs` | https://github.com/openclaw-xian/pdd-bookkeeping |
+| `pdd-bookkeeping` | 唯一入口（含 modules） | `run.mjs` | https://github.com/openclaw-xian/pdd-bookkeeping |
 
 ### 安装命令（示例）
 
@@ -85,3 +85,14 @@ node run.mjs suite-config.json
 `done` / `skipped` / `missing` / `needs` / `preflight` / `failed`；exit 4 needs / 3 preflight / 5 failed / 0 done。
 
 详细规则、边界、踩坑见 [SKILL.md](SKILL.md) 和 [references/](references/)。
+
+## 执行前先问用户
+
+`run.mjs` 不再默认跑全部模块。缺少 `modules` 时返回 `modules_missing`，先问用户：
+
+- 账单 / 订单 / 推广费用 / 客服绩效 / 全部
+- 哪些店铺
+- 时间范围（用户指定，不默认）
+- 输出根目录
+
+模块的格式、字段、默认值、校验规则完全沿用原 skill，总控只负责编排、串行执行、校验产物和汇总。
