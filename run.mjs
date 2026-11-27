@@ -164,13 +164,24 @@ async function runModule(m) {
   return { module: m, status, exitCode, wallSec: Number(((Date.now() - started) / 1000).toFixed(1)), config: cfgPath, log: logPath, stores };
 }
 
+function moduleFiles(m, files) {
+  const rules = {
+    bills: ["账单信息.md", /-对账中心/],
+    promo: ["推广花费.md", /-推广/],
+    orders: ["订单信息.md", /-订单/],
+    kefu: ["客服绩效.md", /-客服绩效/],
+  };
+  const [exact, re] = rules[m] || [];
+  return (files || []).filter((f) => f === exact || (re && re.test(f)));
+}
+
 const results = [];
 for (const m of modules) {
   const r = await runModule(m);
   results.push(r);
   for (const s of (r.stores || [])) {
     try {
-      await recordShopOperation({ root: LEDGER_ROOT, shop: s.shop, module: m, action: "bookkeeping-export", period: from + "~" + to, status: s.status, outputs: (s.outputs && s.outputs.files) || [], runId: "bookkeeping-" + stamp, evidence: path.join(RUN_DIR, "report.json") });
+      await recordShopOperation({ root: LEDGER_ROOT, shop: s.shop, module: m, action: "bookkeeping-export", period: from + "~" + to, status: s.status, outputs: moduleFiles(m, (s.outputs && s.outputs.files) || []), runId: "bookkeeping-" + stamp, evidence: path.join(RUN_DIR, "report.json") });
     } catch (e) { console.error("SHOP_LEDGER_FAILED " + (e && e.message || e)); }
   }
 }
