@@ -21,7 +21,7 @@
 | `pdd-promo-cost` | 推广花费 | `run.mjs` | https://github.com/openclaw-xian/pdd-promo-cost |
 | `pdd-order-export` | 订单导出 | `run.mjs` | https://github.com/openclaw-xian/pdd-order-export |
 | `pdd-kefu-performance` | 客服绩效截图 | `run.mjs` | https://github.com/openclaw-xian/pdd-kefu-performance |
-| `pdd-bookkeeping` | 唯一入口（含 modules） | `run.mjs` | https://github.com/openclaw-xian/pdd-bookkeeping |
+| `pdd-bookkeeping` | 唯一入口（含 modules） | `run.mjs` | https://github.com/world-geniuses/pdd-bookkeeping |
 
 ### 安装命令（示例）
 
@@ -31,7 +31,7 @@ git clone https://github.com/openclaw-xian/pdd-bills.git ~/.agents/skills/pdd-bi
 git clone https://github.com/openclaw-xian/pdd-promo-cost.git ~/.agents/skills/pdd-promo-cost
 git clone https://github.com/openclaw-xian/pdd-order-export.git ~/.agents/skills/pdd-order-export
 git clone https://github.com/openclaw-xian/pdd-kefu-performance.git ~/.agents/skills/pdd-kefu-performance
-git clone https://github.com/openclaw-xian/pdd-bookkeeping.git ~/.agents/skills/pdd-bookkeeping
+git clone https://github.com/world-geniuses/pdd-bookkeeping.git ~/.agents/skills/pdd-bookkeeping
 ```
 
 Windows 也可以直接用目录联接：
