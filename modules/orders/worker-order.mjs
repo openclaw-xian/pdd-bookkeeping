@@ -312,6 +312,26 @@ async function cellRect(tableIndex, day) {
   }, { ti: tableIndex, d: String(day) });
 }
 
+async function cellRectByMonth(month, day) {
+  return page.evaluate(({ month, day }) => {
+    const vis = (e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+    const cls = (e) => String(e.className || "");
+    const cells = [...document.querySelectorAll("td[class*='RPR_tdDay']")].filter((e) => {
+      if (!vis(e)) return false;
+      const t = (e.innerText || "").trim();
+      return (t === String(day) || t === ("0" + day).slice(-2)) && !/RPR_outOfMonth|RPR_disabled/.test(cls(e));
+    });
+    for (const e of cells) {
+      const wrap = e.closest("[class*='RPR_tableWrapper']");
+      const txt = wrap ? String(wrap.innerText || "").replace(/\s+/g, " ") : "";
+      if (!txt.includes(month + "月")) continue;
+      const b = e.getBoundingClientRect();
+      return { x: Math.round(b.x + b.width / 2), y: Math.round(b.y + b.height / 2) };
+    }
+    return null;
+  }, { month, day: String(day) });
+}
+
 async function clickText(text) {
   const r = await page.evaluate((t) => {
     const vis = (e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && !e.disabled; };
@@ -329,7 +349,7 @@ async function clickText(text) {
 async function setDateRange() {
   const startMonth = Number(JOB.from.slice(5, 7));
   const startDay = Number(JOB.from.slice(8, 10));
-  const endPlus = plusDays(JOB.to, 1);
+  const endPlus = JOB.to;
   const endMonth = Number(endPlus.slice(5, 7));
   const endDay = Number(endPlus.slice(8, 10));
   const expected = dtText(JOB.from) + " ~ " + dtText(endPlus);
@@ -343,9 +363,30 @@ async function setDateRange() {
     if (!startCell) throw new Error("start_cell_not_found:" + startDay);
     await page.mouse.click(startCell.x, startCell.y);
     await page.waitForTimeout(350);
+    if (!(await hasPanel())) {
+      log("date_panel_closed_after_start", "attempt=" + attempt);
+      if (!(await openPanel())) continue;
+      await setPanel("left", startMonth);
+      if (endMonth !== startMonth) await setPanel("right", endMonth);
+    }
     const endTable = endMonth === startMonth ? 0 : 1;
-    const endCell = await cellRect(endTable, endDay);
-    if (!endCell) throw new Error("end_cell_not_found:" + endDay);
+    let endCell = await cellRect(endTable, endDay);
+    if (!endCell) endCell = await cellRect(endTable === 0 ? 1 : 0, endDay);
+    if (!endCell) endCell = await cellRectByMonth(endMonth, endDay);
+    if (!endCell) {
+      const direct = await page.evaluate(({ expected }) => {
+        const vis = (e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+        const i = [...document.querySelectorAll("input")].filter(vis).find((e) => /请选择日期/.test(e.placeholder || "") || (e.value || "").includes("~"));
+        if (!i) return false;
+        const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+        setter.call(i, expected);
+        i.dispatchEvent(new Event("input", { bubbles: true }));
+        i.dispatchEvent(new Event("change", { bubbles: true }));
+        return true;
+      }, { expected });
+      if (direct) { log("date_direct_fill", expected); return { expected, actual: expected, direct: true }; }
+      throw new Error("end_cell_not_found:" + endDay);
+    }
     await page.mouse.click(endCell.x, endCell.y);
     await page.waitForTimeout(350);
     if (!(await hasPanel())) {
@@ -442,12 +483,16 @@ async function markExportDone() {
 }
 
 async function findReportDownload(pg = page) {
-  const expected = JOB.from + " 00:00 到 " + plusDays(JOB.to, 1) + " 00:00";
+  const expected = JOB.from + " 00:00 到 " + JOB.to + " 00:00";
   return pg.evaluate(({ expected }) => {
     const vis = (e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
     const txt = (e) => (e ? (e.innerText || "").replace(/\s+/g, " ").trim() : "");
     for (const e of document.querySelectorAll("div,span")) {
-      if (!vis(e) || !txt(e).includes("拼单成功时间") || !txt(e).includes(expected)) continue;
+      if (!vis(e)) continue;
+      const s = txt(e);
+      if (!s.includes("拼单成功时间")) continue;
+      const ok = s.includes(expected) || (s.includes(JOB.from) && s.includes(JOB.to));
+      if (!ok) continue;
       let node = e;
       for (let up = 0; up < 8 && node; up++, node = node.parentElement) {
         const btn = [...node.querySelectorAll("button,span,div,a")].find((b) => vis(b) && txt(b) === "下载报表");
@@ -634,7 +679,7 @@ async function exportOrders() {
 
   // 等「下载报表」；只点与本次日期范围匹配的报表
   let dlBtn = null;
-  for (let i = 0; i < 30 && !dlBtn; i++) {
+  for (let i = 0; i < 60 && !dlBtn; i++) {
     dlBtn = await findReportDownload(expPage);
     if (!dlBtn) await expPage.waitForTimeout(1000);
   }
