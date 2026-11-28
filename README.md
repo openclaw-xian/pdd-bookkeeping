@@ -104,3 +104,8 @@ node run.mjs suite-config.json
 ## 共享账本配置
 
 首次指定 `ledgerRoot` 后会写入共享配置（默认 `%USERPROFILE%/.config/pdd/ledger.json`，可用 `PDD_LEDGER_CONFIG` 覆盖）。其他 skill 自动读取，不再重复询问；配置里只存目录指针，不存业务数据。
+
+## 边界与模块 root
+
+- `orders` 只支持近 3 个月；`kefu` 只保留 62 天。
+- 单跑模块时 `root` 由配置决定；总控会统一传 `root`，模块文档默认值只用于单跑。
