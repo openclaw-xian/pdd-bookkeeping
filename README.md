@@ -27,7 +27,6 @@
 
 ```bash
 mkdir -p ~/.agents/skills
-git clone https://github.com/world-geniuses/pdd-bookkeeping.git ~/.agents/skills/pdd-bookkeeping
 ```
 
 Windows 也可以直接用目录联接：

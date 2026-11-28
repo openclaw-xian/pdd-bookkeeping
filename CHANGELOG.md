@@ -1,3 +1,5 @@
+# Changelog
+
 ## 0.2.10 — 2026-11-28
 
 - README 补 orders 3 个月 / kefu 62 天限制与模块 root 口径。
@@ -52,8 +54,6 @@
 - 总控不再依赖 `~/.agents/skills` 外部路径，默认从本 skill `modules/` 调用。
 - 缺少 `modules` 返回 `modules_missing`，先问用户导出内容；时间由用户指定。
 - 模块格式/字段/默认值/校验规则完全沿用原 skill。
-
-# Changelog
 
 ## 0.2.9 — 2026-11-28
 
