@@ -4,6 +4,11 @@
 
 - README 补 orders 3 个月 / kefu 62 天限制与模块 root 口径。
 
+## 0.2.9 — 2026-11-28
+
+- C1：README 删除“必须 clone 四个模块仓库”和 child_not_found 矛盾说明，明确只装本 skill。
+- C3：README 的 skillsRoot 改为实际存在的 modulesRoot。
+
 ## 0.2.8 — 2026-11-27
 
 - 脱敏：真实店铺名/推广金额改为 `<店铺>`/`<金额>`。
@@ -54,11 +59,6 @@
 - 总控不再依赖 `~/.agents/skills` 外部路径，默认从本 skill `modules/` 调用。
 - 缺少 `modules` 返回 `modules_missing`，先问用户导出内容；时间由用户指定。
 - 模块格式/字段/默认值/校验规则完全沿用原 skill。
-
-## 0.2.9 — 2026-11-28
-
-- C1：README 删除“必须 clone 四个模块仓库”和 child_not_found 矛盾说明，明确只装本 skill。
-- C3：README 的 skillsRoot 改为实际存在的 modulesRoot。
 
 ## 0.1.2 — 2026-11-21
 
