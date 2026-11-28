@@ -53,10 +53,10 @@ dir %USERPROFILE%\.agents\skills /b
 应看到 5 个目录。总控默认从 `~/.agents/skills` 找；放在别处时配置：
 
 ```json
-{ "skillsRoot": "<skills目录>" }
+{ "modulesRoot": "<模块目录>" }
 ```
 
-**只装 `pdd-bookkeeping` 会报 `child_not_found`，这是预期行为。**
+**只装 `pdd-bookkeeping` 即可；`modules/` 已随包分发，独立模块仓库仅供单模块调试。**
 
 ## 用法
 

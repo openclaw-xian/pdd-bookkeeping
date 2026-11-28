@@ -51,6 +51,11 @@
 
 # Changelog
 
+## 0.2.9 — 2026-11-28
+
+- C1：README 删除“必须 clone 四个模块仓库”和 child_not_found 矛盾说明，明确只装本 skill。
+- C3：README 的 skillsRoot 改为实际存在的 modulesRoot。
+
 ## 0.1.2 — 2026-11-21
 
 - README 增加 5 个 skill 安装清单、仓库链接、git clone / mklink 示例和装完自检。
