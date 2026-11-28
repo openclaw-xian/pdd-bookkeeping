@@ -39,7 +39,7 @@ node <skill目录>/run.mjs suite-config.json
 - `only`：只跑指定店铺
 - `periodDir` / `label`：部分月份并到同月目录时覆盖（四件套统一）
 - `concurrency`：各模块默认并发数；也可 `bills/promo/orders/kefu` 各自配
-- `skillsRoot`：子 skill 目录，默认 `~/.agents/skills`
+- `modulesRoot`：子 skill 目录，默认 `~/.agents/skills`
 
 ## 执行顺序
 

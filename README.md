@@ -27,10 +27,6 @@
 
 ```bash
 mkdir -p ~/.agents/skills
-git clone https://github.com/openclaw-xian/pdd-bills.git ~/.agents/skills/pdd-bills
-git clone https://github.com/openclaw-xian/pdd-promo-cost.git ~/.agents/skills/pdd-promo-cost
-git clone https://github.com/openclaw-xian/pdd-order-export.git ~/.agents/skills/pdd-order-export
-git clone https://github.com/openclaw-xian/pdd-kefu-performance.git ~/.agents/skills/pdd-kefu-performance
 git clone https://github.com/world-geniuses/pdd-bookkeeping.git ~/.agents/skills/pdd-bookkeeping
 ```
 
